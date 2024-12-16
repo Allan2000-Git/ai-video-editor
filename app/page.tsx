@@ -1,4 +1,6 @@
+import { UserButton } from "@clerk/nextjs";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -47,6 +49,8 @@ export default function Home() {
           >
             Read our docs
           </a>
+          <Link href={'/sign-in'}>Sign in</Link>
+          <UserButton />
         </div>
       </main>
       <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
