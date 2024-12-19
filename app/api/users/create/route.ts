@@ -12,32 +12,42 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
             return NextResponse.json({
                 status: 400,
                 success: false,
+                data: null,
                 message: "Invalid data."
             });
         }
 
         const { id, primaryEmailAddress, firstName, lastName, imageUrl } = user as User;
 
-        const existingUser = await db.select().from(usersTable).where(eq(usersTable.email, primaryEmailAddress?.emailAddress ?? ""));
+        if(!primaryEmailAddress?.emailAddress) return NextResponse.json({
+            status: 500,
+            success: false,
+            data: null,
+            message: "Email address not found with the associated user."
+        });
 
-        if(existingUser) {
+        const existingUser = await db.select().from(usersTable).where(eq(usersTable.email, primaryEmailAddress.emailAddress));
+
+        if(existingUser.length > 0) {
             return NextResponse.json({
                 status: 200,
                 success: true,
+                data: existingUser[0],
                 message: "User already exists. Logging you in now."
             });
         }
 
-        await db.insert(usersTable).values({
+        const newUser = await db.insert(usersTable).values({
             userMetaId: id,
             name: `${firstName} ${lastName}`,
             email: primaryEmailAddress?.emailAddress ?? "",
             image: imageUrl
-        }).returning({ userId: usersTable.id });
+        }).returning({ user });
 
         return NextResponse.json({
             status: 201,
             success: true,
+            data: newUser,
             message: "User data stored successfully. Logging you in now."
         });
     } catch (error) {
@@ -45,6 +55,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         return NextResponse.json({
             status: 500,
             success: false,
+            data: null,
             message: "Internal server error."
         });
     }
