@@ -1,10 +1,10 @@
 "use client"
 
-import { AppSidebar } from "@/app/(components)/app-sidebar"
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { AuthContext } from "@/contexts/AuthContext";
 import { useContext } from "react";
-import SharedLayoutSkeleton from "../(components)/shared-layout-skeleton";
+import { AppSidebar } from "./(components)/app-sidebar";
+import SharedLayoutSkeleton from "./(components)/shared-layout-skeleton";
 
 export default function SharedLayout({ children }: { children: React.ReactNode }) {
     const { isLoading } = useContext(AuthContext);
@@ -19,7 +19,9 @@ export default function SharedLayout({ children }: { children: React.ReactNode }
                     <div className="p-4 h-full">
                         {children}
                     </div> :
-                    <SharedLayoutSkeleton />
+                    <div className="p-4 h-full mt-5">
+                        <SharedLayoutSkeleton />
+                    </div>
                 }
             </main>
         </SidebarProvider>

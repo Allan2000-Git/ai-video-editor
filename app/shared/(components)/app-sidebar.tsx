@@ -22,6 +22,7 @@ import { AuthContext } from "@/contexts/AuthContext"
 import { SidebarCreditsUsedProgress } from "./sidebar-credits-used-progress"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
+import CreateNewVideoButton from "@/app/(components)/create-new-video-button"
 
 // Menu items.
 const data = {
@@ -120,6 +121,15 @@ export function AppSidebar() {
                 </SidebarMenu>
             </SidebarHeader>
             <SidebarContent>
+                <SidebarGroup>
+                    <SidebarGroupContent>
+                        <SidebarMenu>
+                            <SidebarMenuItem>
+                                <CreateNewVideoButton />
+                            </SidebarMenuItem>
+                        </SidebarMenu>
+                    </SidebarGroupContent>
+                </SidebarGroup>
                 <SidebarGroup>
                 <SidebarGroupContent>
                     <SidebarMenu>
