@@ -5,7 +5,10 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function generateInitials(firstName: string | null, lastName: string | null) {
+export function generateInitials(name: string | null) {
+  if(!name) return
+
+  const [firstName, lastName] = name.split(" ");
   if (!firstName || !lastName) return '';
 
   const firstInitial = firstName.charAt(0).toUpperCase();

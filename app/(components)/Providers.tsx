@@ -5,33 +5,52 @@ import React, { ReactNode, useEffect, useState } from 'react'
 import axios from 'axios'
 import { toast } from 'sonner';
 import { AuthContext } from '@/contexts/AuthContext';
-import { UserResource } from '@clerk/types';
+import { User } from '@/db/schema';
+import { ThemeProvider } from './theme-provider';
+import { useTheme } from 'next-themes';
 
 function Providers({children}: {children: ReactNode}) {
     const {user} = useUser();
-    const [userDetails, setUserDetails] = useState<UserResource | null | undefined>();
+    const { setTheme } = useTheme();
+    const [userDetails, setUserDetails] = useState<User | null>(null);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     useEffect(() => {
         const saveUserToDB = async () => {
-            const data = await axios.post('/api/users/create', {user});
-            if(data.data.success) {
-                setUserDetails(user);
-                toast.success(data.data.message);
-            } else {
-                toast.error(data.data.message);
+            setIsLoading(true);
+            try {
+                const data = await axios.post('/api/users/create', {user});
+                if(data.data.success) {
+                    setUserDetails(data.data.data);
+                } else {
+                    toast.error(data.data.message);
+                }
+            } catch (error: any) {
+                toast.error(error.response?.data?.message || error.message || "Something went wrong");
+            } finally {
+                setIsLoading(false);
             }
         }
 
-        if(user) {
+        if (user && !userDetails) {
             saveUserToDB();
         }
 
-    }, [user]);
+        setTheme("dark")
+
+    }, [user, userDetails, setTheme]);
 
     return (
-        <AuthContext.Provider value={{ userDetails }}>
-            {children}
-        </AuthContext.Provider>
+        <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+        >
+            <AuthContext.Provider value={{ userDetails, isLoading }}>
+                {children}
+            </AuthContext.Provider>
+        </ThemeProvider>
     )
 }
 
