@@ -3,15 +3,15 @@ import React from 'react'
 
 function DashboardPage() {
     return (
-        <div className="w-full">
-            <div className="w-full flex flex-col items-center justify-center gap-2">
+        <div className="w-full h-full flex items-center justify-center">
+            <div className="w-full flex flex-col items-center justify-center gap-4">
                 <Image
                 src={'/empty-state-placeholder.svg'}
                 alt='Empty state placeholder image'
-                width={100}
-                height={100}
+                width={150}
+                height={150}
                 />
-                <p>No data</p>
+                <p className="text-lg text-muted-foreground">No videos created yet. So create one!</p>
             </div>
         </div>
     )

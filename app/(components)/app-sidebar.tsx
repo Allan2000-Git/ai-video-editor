@@ -6,7 +6,6 @@ import {
     SidebarFooter,
     SidebarGroup,
     SidebarGroupContent,
-    SidebarGroupLabel,
     SidebarHeader,
     SidebarMenu,
     SidebarMenuButton,
@@ -69,20 +68,20 @@ export function AppSidebar() {
                 </SidebarHeader>
                 <SidebarContent>
                     <SidebarGroup>
-                    <SidebarGroupContent>
-                        <SidebarMenu>
-                        {
-                            Array.from({ length: 5 }).map((_, index) => (
-                                <SidebarMenuItem
-                                key={index}
-                                className="max-w-max"
-                                >
-                                    <SidebarMenuSkeleton showIcon />
-                                </SidebarMenuItem>
-                            ))
-                        }
-                        </SidebarMenu>
-                    </SidebarGroupContent>
+                        <SidebarGroupContent>
+                            <SidebarMenu>
+                            {
+                                Array.from({ length: 5 }).map((_, index) => (
+                                    <SidebarMenuItem
+                                    key={index}
+                                    className="max-w-max"
+                                    >
+                                        <SidebarMenuSkeleton showIcon />
+                                    </SidebarMenuItem>
+                                ))
+                            }
+                            </SidebarMenu>
+                        </SidebarGroupContent>
                     </SidebarGroup>
                 </SidebarContent>
                 <SidebarFooter>
@@ -122,7 +121,6 @@ export function AppSidebar() {
             </SidebarHeader>
             <SidebarContent>
                 <SidebarGroup>
-                <SidebarGroupLabel>Menu</SidebarGroupLabel>
                 <SidebarGroupContent>
                     <SidebarMenu>
                     {

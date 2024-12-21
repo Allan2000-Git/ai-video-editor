@@ -12,11 +12,11 @@ export default function SharedLayout({ children }: { children: React.ReactNode }
     return (
         <SidebarProvider>
             <AppSidebar />
-            <main className="w-full">
-                <SidebarTrigger />
+            <main className="w-full relative">
+                <SidebarTrigger className="absolute" />
                 {
                     !isLoading ?
-                    <div className="p-4">
+                    <div className="p-4 h-full">
                         {children}
                     </div> :
                     <SharedLayoutSkeleton />
