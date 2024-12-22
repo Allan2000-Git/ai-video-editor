@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import React from 'react'
+import CreateNewVideoButton from '../(components)/create-new-video-button'
 
 function DashboardPage() {
     return (
@@ -12,6 +13,9 @@ function DashboardPage() {
                 height={150}
                 />
                 <p className="text-lg text-muted-foreground">No videos created yet. So create one!</p>
+                <div className="mt-5">
+                    <CreateNewVideoButton />
+                </div>
             </div>
         </div>
     )

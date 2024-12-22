@@ -24,7 +24,7 @@ const options = [
         title: "Start from Scratch",
         icon: BadgePlus,
         color: "#28A745",
-        url: '/editor'
+        url: '/custom-editor'
     }
 ]
 

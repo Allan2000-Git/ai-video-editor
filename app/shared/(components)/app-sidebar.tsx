@@ -18,7 +18,7 @@ import { LayoutDashboard, CreditCard, Settings, Command } from "lucide-react"
 import Link from "next/link"
 import NavUser from "./nav-user"
 import { useContext } from "react"
-import { AuthContext } from "@/contexts/AuthContext"
+import { AuthContext, useAuthContext } from "@/contexts/auth-context"
 import { SidebarCreditsUsedProgress } from "./sidebar-credits-used-progress"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
@@ -47,7 +47,7 @@ const data = {
 
 export function AppSidebar() {
     const pathName = usePathname();
-    const { userDetails, isLoading }: any = useContext(AuthContext);
+    const { isLoading, userDetails } = useAuthContext();
     const {state} = useSidebar();
 
     if (isLoading) {

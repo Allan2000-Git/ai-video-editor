@@ -12,6 +12,13 @@ const compat = new FlatCompat({
 const eslintConfig = [
   ...compat.extends("next/core-web-vitals", "next/typescript"),
   {
+    plugins: ["@remotion"],
+    overrides: [
+      {
+        "files": ["remotion/*.{ts,tsx}"],
+        "extends": ["plugin:@remotion/recommended"]
+      }
+    ],
     rules: {
       "@typescript-eslint/no-explicit-any": "off",
     },
