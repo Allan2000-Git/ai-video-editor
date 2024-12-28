@@ -1,4 +1,6 @@
-import React from "react";
+"use client"
+
+import React, { useState } from "react";
 import {
     Dialog,
     DialogContent,
@@ -9,32 +11,59 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { BadgePlus, Brain, Plus } from "lucide-react";
+import { BadgePlus, Brain, LoaderCircle, Plus } from "lucide-react";
 import { DialogClose } from "@radix-ui/react-dialog";
-import Link from "next/link";
+import axios from "axios";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { useSidebar } from "@/components/ui/sidebar";
+import { useAuthContext } from "@/contexts/auth-context";
 
 const options = [
     {
         title: "Start with AI",
         icon: Brain,
         color: "#007BFF",
-        url: '/ai-editor'
+        url: '/ai-editor',
+        type: 'AI'
     },
     {
         title: "Start from Scratch",
         icon: BadgePlus,
         color: "#28A745",
-        url: '/custom-editor'
+        url: '/custom-editor',
+        type: 'CUSTOM'
     }
 ]
 
 function CreateNewVideoButton() {
+    const router = useRouter();
+    const {state} = useSidebar();
+    const {userDetails} = useAuthContext();
+    const [isPending, setIsPending] = useState<boolean>(false);
+
+    const createCustomVideo = async (type: string) => {
+        setIsPending(true);
+        try {
+            const data = await axios.post('/api/video', {type, userDetails});
+            if(data.data.success) {
+                router.push(`/custom-editor/${data.data.data}`);
+            } else {
+                toast.error(data.data.message);
+            }
+        } catch (error: any) {
+            toast.error(error.response?.data?.message || error.message || "Something went wrong");
+        } finally {
+            setIsPending(false);
+        }
+    }
+
     return (
         <Dialog>
         <DialogTrigger asChild>
             <Button type="button" className="w-full">
                 <Plus size={20} />
-                Create New Video
+                {state === "expanded" && <>Create New Video</>}
             </Button>
         </DialogTrigger>
         <DialogContent>
@@ -48,14 +77,20 @@ function CreateNewVideoButton() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5 my-3">
                 {
                     options.map((option) => (
-                        <Link
+                        <Button
+                        type="button"
+                        variant={"link"}
                         key={option.title}
-                        href={option.url}
-                        className="flex flex-col items-center justify-center gap-4 border rounded-md p-4 hover:shadow-md"
+                        disabled={isPending}
+                        onClick={() => createCustomVideo(option.type)}
+                        className="h-max text-base flex flex-col items-center justify-center gap-4 border rounded-md p-4 hover:shadow-md hover:no-underline"
                         >
                             <option.icon size={34} color={option.color} />
-                            <span>{option.title}</span>
-                        </Link>
+                            <div className="flex items-center gap-2">
+                                {isPending && <LoaderCircle size={18} className="animate-spin" />}
+                                <span>{option.title}</span>
+                            </div>
+                        </Button>
                     ))
                 }
             </div>
