@@ -19,12 +19,14 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
         const { id, primaryEmailAddress, firstName, lastName, imageUrl } = user as User;
 
-        if(!primaryEmailAddress?.emailAddress) return NextResponse.json({
-            status: 500,
-            success: false,
-            data: null,
-            message: "Email address not found with the associated user."
-        });
+        if(!primaryEmailAddress?.emailAddress) {
+            return NextResponse.json({
+                status: 500,
+                success: false,
+                data: null,
+                message: "Email address not found with the associated user."
+            });
+        }
 
         const existingUser = await db.select().from(usersTable).where(eq(usersTable.email, primaryEmailAddress.emailAddress));
 
