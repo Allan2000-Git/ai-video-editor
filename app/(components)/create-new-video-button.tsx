@@ -18,9 +18,11 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useSidebar } from "@/components/ui/sidebar";
 import { useAuthContext } from "@/contexts/auth-context";
+import { VideoTypeValues } from "@/db/schema";
 
 const options = [
     {
+        id: 1,
         title: "Start with AI",
         icon: Brain,
         color: "#007BFF",
@@ -28,6 +30,7 @@ const options = [
         type: 'AI'
     },
     {
+        id: 2,
         title: "Start from Scratch",
         icon: BadgePlus,
         color: "#28A745",
@@ -76,7 +79,7 @@ function CreateNewVideoButton() {
             </DialogHeader>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5 my-3">
                 {
-                    options.map((option) => (
+                    options.map((option, index) => (
                         <Button
                         type="button"
                         variant={"link"}
@@ -87,7 +90,7 @@ function CreateNewVideoButton() {
                         >
                             <option.icon size={34} color={option.color} />
                             <div className="flex items-center gap-2">
-                                {isPending && <LoaderCircle size={18} className="animate-spin" />}
+                                {isPending && option.type === VideoTypeValues[0] && <LoaderCircle size={18} className="animate-spin" />}
                                 <span>{option.title}</span>
                             </div>
                         </Button>
