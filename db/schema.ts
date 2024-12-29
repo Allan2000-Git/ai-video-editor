@@ -1,8 +1,8 @@
 import { InferSelectModel } from "drizzle-orm";
-import { index, integer, json, pgEnum, pgTable, timestamp, varchar, } from "drizzle-orm/pg-core";
+import { index, integer, json, pgEnum, pgTable, timestamp, uuid, varchar, } from "drizzle-orm/pg-core";
 
 export const usersTable = pgTable("users", {
-    id: integer().primaryKey().generatedAlwaysAsIdentity(),
+    id: integer().primaryKey().generatedAlwaysAsIdentity({ startWith: 1000 }),
     userMetaId: varchar(),
     name: varchar({ length: 255 }).notNull(),
     image: varchar(),
@@ -12,13 +12,13 @@ export const usersTable = pgTable("users", {
     updatedAt: timestamp().$onUpdate(() => new Date())
 });
 
-export const videoType = pgEnum('type', ['CUSTOM', 'AI']);
+export const videoType = pgEnum('tag', ['CUSTOM', 'AI']);
 
 export const videosTable = pgTable("videos", {
-    id: integer().primaryKey().generatedAlwaysAsIdentity(),
+    id: uuid().defaultRandom().primaryKey(),
     title: varchar({ length: 255 }).notNull(),
     data: json(),
-    type: videoType().default("CUSTOM").notNull(),
+    tag: videoType().default("CUSTOM").notNull(),
     createdBy: integer('createdBy').references(() => usersTable.id, {onDelete: 'cascade'}).notNull(),
     createdAt: timestamp().defaultNow().notNull(),
 }, (table) => [
