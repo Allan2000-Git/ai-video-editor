@@ -1,3 +1,6 @@
+"use client"
+
+import { defaultFrame } from "@/app/custom-editor/(components)/frames-list";
 import { createContext, Dispatch, SetStateAction, useContext, useState } from "react";
 
 interface RemotionPlayerType {
@@ -15,7 +18,7 @@ export const RemotionPlayerContext = createContext<RemotionPlayerType | undefine
 
 export function RemotionPlayerContextProvider({children}: {children: React.ReactNode}) {
     const [videoFrames, setVideoFrames] = useState<VideoFramesType>({
-      frames: [],
+      frames: [defaultFrame],
       totalDuration: 2,
       selectedFrame: 0
     });
