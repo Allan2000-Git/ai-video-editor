@@ -28,8 +28,28 @@ export async function POST(req: NextRequest, res: NextResponse): Promise<NextRes
 
             const result = await db.insert(videosTable).values({
                 title: 'Default Title',
+                data: {
+                    frames: [
+                        {
+                            "image": '/frame-placeholder.webp',
+                            "name": 'Frame 1',
+                            "color": '#000',
+                            "fontSize": '16px',
+                            "duration": 5
+                        },
+                        {
+                            "image": '/frame-placeholder.webp',
+                            "name": 'Frame 1',
+                            "color": '#000',
+                            "fontSize": '16px',
+                            "duration": 5
+                        },
+                    ],
+                    totalDuration: 10,
+                    selectedFrame: 0
+                },
                 createdBy: userDetails.id,
-                type: 'CUSTOM'
+                tag: 'CUSTOM'
             }).returning({id: videosTable.id});
 
             const newVideoId = result[0].id;
