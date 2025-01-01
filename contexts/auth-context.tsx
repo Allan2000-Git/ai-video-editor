@@ -1,6 +1,8 @@
+"use client"
+
 import { User } from "@/db/schema";
 import { useUser } from "@clerk/nextjs";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -14,7 +16,13 @@ interface AuthContextType {
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthContextProvider({children}: {children: React.ReactNode}) {
-    const [userDetails, setUserDetails] = useState<User | null>(null);
+  const [userDetails, setUserDetails] = useState(() => {
+    if (typeof window !== 'undefined') {
+        const storedUserDetails = sessionStorage.getItem('userDetails');
+        return storedUserDetails ? JSON.parse(storedUserDetails) : null;
+    }
+    return null;
+  });
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const {user} = useUser();
@@ -23,9 +31,10 @@ export function AuthContextProvider({children}: {children: React.ReactNode}) {
       const saveUserToDB = async () => {
           setIsLoading(true);
           try {
-              const data = await axios.post('/api/users/create', {user});
+              const data: AxiosResponse = await axios.post('/api/users/create', {user});
               if(data.data.success) {
                   setUserDetails(data.data.data);
+                  sessionStorage.setItem('userDetails', JSON.stringify(data.data.data));
               } else {
                   toast.error(data.data.message);
               }
@@ -39,7 +48,13 @@ export function AuthContextProvider({children}: {children: React.ReactNode}) {
       if (user && !userDetails) {
           saveUserToDB();
       }
-    }, [user, userDetails]);
+    }, [user]);
+
+    useEffect(() => {
+      if (userDetails) {
+          sessionStorage.setItem('userDetails', JSON.stringify(userDetails));
+      }
+    }, [userDetails]);
 
     return (
       //giving access globally
