@@ -15,8 +15,11 @@ export const RemotionComposition = () => {
                         durationByFrame += (frame.duration * FRAMES_PER_SECOND);
 
                         return (
-                            <Sequence key={index} from={fromDuration} durationInFrames={frame.duration * FRAMES_PER_SECOND}>
-                                <h1 className="text-black">Frame: {index}</h1>
+                            <Sequence
+                            key={index}
+                            from={fromDuration}
+                            durationInFrames={frame.duration * FRAMES_PER_SECOND}>
+                                <h1 className="text-black">{frame.name}</h1>
                             </Sequence>
                         )
                     })

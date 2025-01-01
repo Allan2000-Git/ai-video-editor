@@ -48,18 +48,18 @@ export const RemotionPlayer: React.FC = () => {
     return (
         <div>
             <div className="w-full p-4 flex items-center justify-center border rounded-md">
-                <Player
-                ref={videoPlayerRef}
-                component={RemotionComposition}
-                durationInFrames={videoFrames.totalDuration * FRAMES_PER_SECOND}
-                compositionWidth={selectedAspectRatio.width}
-                compositionHeight={selectedAspectRatio.height}
-                fps={FRAMES_PER_SECOND}
-                controls
-                style={{
-                    borderRadius: 'calc(var(--radius) - 2px)'
-                }}
-                />
+                {
+                    videoFrames.totalDuration &&
+                    <Player
+                    ref={videoPlayerRef}
+                    component={RemotionComposition}
+                    durationInFrames={videoFrames.totalDuration * FRAMES_PER_SECOND}
+                    compositionWidth={selectedAspectRatio.width}
+                    compositionHeight={selectedAspectRatio.height}
+                    fps={FRAMES_PER_SECOND}
+                    controls
+                    />
+                }
             </div>
             <div className="mt-5 flex items-center gap-5">
                 <Fullscreen />
